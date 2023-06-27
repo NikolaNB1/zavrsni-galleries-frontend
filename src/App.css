@@ -7,6 +7,12 @@
   background-size: cover;
 }
 
+@media (max-width: 768px) {
+  .App {
+    background-size: contain;
+  }
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
