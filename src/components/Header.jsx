@@ -44,7 +44,7 @@ const Header = () => {
                     <Link to="/create">Create New Gallery</Link>
                   </li>
                   <li>
-                    <Link to="#">My Galleries</Link>
+                    <Link to="/my-galleries">My Galleries</Link>
                   </li>
                   <li>
                     <button

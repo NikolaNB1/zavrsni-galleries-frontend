@@ -53,6 +53,25 @@ const CreateGalleryForm = () => {
       return;
     }
 
+    const imageExtensions = ["png", "jpg", "jpeg"];
+
+    const urlValidationRegex = /^(http|https):\/\/[^ "]+$/;
+
+    for (const url of gallery.urls) {
+      if (!urlValidationRegex.test(url)) {
+        setError("Please enter a valid URL.");
+        return;
+      }
+
+      const fileExtension = url.split(".").pop().toLowerCase();
+      if (!imageExtensions.includes(fileExtension)) {
+        setError(
+          "Please enter a URL ending with a valid image extension (png, jpg, jpeg)."
+        );
+        return;
+      }
+    }
+
     addGallery(gallery.name, gallery.description, gallery.urls, user.user.id);
     setError("");
     setGallery({

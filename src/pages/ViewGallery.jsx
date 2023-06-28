@@ -13,7 +13,6 @@ const ViewGallery = () => {
     if (id) {
       getGalleryById(id).then(({ data }) => {
         setGallery(data);
-        console.log(data);
       });
     }
   }, [id]);

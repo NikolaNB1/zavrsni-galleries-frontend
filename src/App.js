@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import CreateGallery from "./pages/CreateGallery";
 import ProtectedRoute from "./shared/ProtectedRoute";
 import ViewGallery from "./pages/ViewGallery";
+import MyGalleries from "./pages/MyGalleries";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           }
         ></Route>
         <Route path="galleries/:id" element={<ViewGallery />}></Route>
+        <Route path="my-galleries" element={<MyGalleries />}></Route>
       </Routes>
     </div>
   );
