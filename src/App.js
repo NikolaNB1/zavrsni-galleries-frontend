@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import CreateGallery from "./pages/CreateGallery";
 import ProtectedRoute from "./shared/ProtectedRoute";
+import ViewGallery from "./pages/ViewGallery";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             </ProtectedRoute>
           }
         ></Route>
+        <Route path="galleries/:id" element={<ViewGallery />}></Route>
       </Routes>
     </div>
   );

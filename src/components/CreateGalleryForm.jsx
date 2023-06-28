@@ -14,7 +14,7 @@ const CreateGalleryForm = () => {
     name: "",
     description: "",
     urls: [],
-    author_id: user.user.id,
+    user_id: user.user.id,
   });
 
   const handleInputChange = (event) => {
@@ -59,7 +59,7 @@ const CreateGalleryForm = () => {
       name: "",
       description: "",
       urls: [],
-      author_id: user.user.id,
+      user_id: user.user.id,
     });
     navigate("/");
   };

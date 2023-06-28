@@ -5,8 +5,8 @@ import GalleriesContext from "./GalleriesContext";
 const GalleryProvider = ({ children }) => {
   const [galleryState, setGalleryState] = useState([]);
 
-  const postNewGallery = (name, description, urls, author_id) => {
-    postGallery(name, description, urls, author_id)
+  const postNewGallery = (name, description, urls, user_id) => {
+    postGallery(name, description, urls, user_id)
       .then(({ data }) => {
         setGalleryState((prevState) => [...prevState, data]);
       })

@@ -1,22 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import UserContext from "../storage/UserContext";
-import { getUsers, logIn } from "../service/usersService";
+import { logIn } from "../service/usersService";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { logInUser } = useContext(UserContext);
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    getUsers()
-      .then(({ data }) => {
-        setUsers(data.users);
-      })
-      .catch((error) => {
-        console.log("Error fetching users:", error);
-      });
-  }, []);
 
   const [user, setUser] = useState({
     email: "",
@@ -28,14 +17,6 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const existingUser = users.find(
-      (existingUser) => existingUser.email === user.email
-    );
-    if (!existingUser) {
-      setError("Invalid email. Please try again.");
-      return;
-    }
-
     logIn(user.email, user.password)
       .then(({ data }) => {
         logInUser(data);
@@ -44,7 +25,7 @@ const Login = () => {
         navigate("/");
       })
       .catch(() => {
-        setError("Invalid password. Please try again.");
+        setError("Invalid email or password. Please try again.");
       });
 
     setUser({
@@ -126,7 +107,11 @@ const Login = () => {
                       </div>
 
                       <div className="pt-1 mb-4 text-center">
-                        <button className="btn btn-dark btn-lg" type="submit">
+                        <button
+                          className="btn btn-dark btn-lg"
+                          type="submit"
+                          disabled={!user.email || !user.password}
+                        >
                           Log in
                         </button>
                       </div>

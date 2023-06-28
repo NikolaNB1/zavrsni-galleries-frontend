@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 const GalleryRow = ({ gallery, id }) => {
+  const formattedDate = new Date(gallery.created_at).toLocaleString();
+
   return (
     <div
       key={id}
@@ -20,8 +22,15 @@ const GalleryRow = ({ gallery, id }) => {
           <p className="card-text mb-auto">
             Description: {gallery.description}
           </p>
+          <div className="mb-1 text-body-secondary">
+            Author: {gallery.user?.first_name} {gallery.user?.last_name}
+          </div>
+          <p className="card-text mb-auto">Release date: {formattedDate}</p>
           <div>
-            <Link to="#" className="btn btn-outline-success">
+            <Link
+              to={`/galleries/${gallery.id}`}
+              className="btn btn-outline-success"
+            >
               View gallery
             </Link>
           </div>
