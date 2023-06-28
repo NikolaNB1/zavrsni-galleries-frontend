@@ -30,10 +30,10 @@ const Header = () => {
               {loggedIn ? (
                 <>
                   <li>
-                    <Link to="/"></Link>
+                    <Link to="/create">Create New Gallery</Link>
                   </li>
                   <li>
-                    <Link to="/"></Link>
+                    <Link to="#">My Galleries</Link>
                   </li>
                   <li>
                     <button

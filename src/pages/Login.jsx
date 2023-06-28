@@ -1,11 +1,22 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../storage/UserContext";
-import { logIn } from "../service/usersService";
+import { getUsers, logIn } from "../service/usersService";
 import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { logInUser } = useContext(UserContext);
   const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    getUsers()
+      .then(({ data }) => {
+        setUsers(data.users);
+      })
+      .catch((error) => {
+        console.log("Error fetching users:", error);
+      });
+  }, []);
 
   const [user, setUser] = useState({
     email: "",
@@ -16,15 +27,24 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const existingUser = users.find(
+      (existingUser) => existingUser.email === user.email
+    );
+    if (!existingUser) {
+      setError("Invalid email. Please try again.");
+      return;
+    }
+
     logIn(user.email, user.password)
       .then(({ data }) => {
         logInUser(data);
         localStorage.setItem("access_token", data.authorisation.token);
+        setError("");
         navigate("/");
       })
-      .catch((error) => {
-        setError("Invalid email or password. Please try again.");
-        console.error(error);
+      .catch(() => {
+        setError("Invalid password. Please try again.");
       });
 
     setUser({
@@ -88,7 +108,7 @@ const Login = () => {
                           value={user.email}
                           required
                         />
-                        <label htmlFor="floatingInput">Email adresa</label>
+                        <label htmlFor="floatingInput">Email</label>
                       </div>
 
                       <div className="form-floating mb-4">
@@ -99,24 +119,24 @@ const Login = () => {
                           name="password"
                           onChange={handelInputChange}
                           value={user.password}
-                          placeholder="Lozinka"
+                          placeholder="Password"
                           required
                         />
-                        <label htmlFor="floatingPassword">Lozinka</label>
+                        <label htmlFor="floatingPassword">Password</label>
                       </div>
 
                       <div className="pt-1 mb-4 text-center">
                         <button className="btn btn-dark btn-lg" type="submit">
-                          Prijavi se
+                          Log in
                         </button>
                       </div>
                       <p
                         className="mb-5 pb-lg-2 text-center"
                         style={{ color: "#393f81" }}
                       >
-                        Nemate nalog?
+                        Don't have account?
                         <Link to="/register" style={{ color: "#393f81" }}>
-                          Registrujte se ovde
+                          Register here
                         </Link>
                       </p>
                     </form>

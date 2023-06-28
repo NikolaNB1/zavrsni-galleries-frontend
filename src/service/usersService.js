@@ -26,3 +26,7 @@ export const logIn = (email, password) => {
 export const logOut = () => {
   return API.post("/logout");
 };
+
+export const getUsers = () => {
+  return API.get("/users");
+};

@@ -55,7 +55,7 @@ body {
   box-sizing: border-box;
   font-family: "Quicksand", sans-serif;
   font-size: 62.5%;
-  font-size: 16px;
+  font-size: 14px;
 }
 .nav {
   width: 100%;
@@ -97,7 +97,7 @@ body {
   width: auto;
   height: 65px;
   padding: 0;
-  padding-right: 3rem;
+  padding-right: 2rem;
 }
 
 .nav div.main_list ul li a {
