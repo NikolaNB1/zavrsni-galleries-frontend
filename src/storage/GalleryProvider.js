@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
-import { getGalleries, postGallery } from "../service/galleryService";
+import { useState } from "react";
+import { postGallery } from "../service/galleryService";
 import GalleriesContext from "./GalleriesContext";
 
 const GalleryProvider = ({ children }) => {
   const [galleryState, setGalleryState] = useState([]);
 
-  useEffect(() => {
-    getGalleries().then(({ data }) => setGalleryState(data));
-  }, []);
-
-  const postNewGallery = (name, description, urls) => {
-    postGallery(name, description, urls)
+  const postNewGallery = (name, description, urls, author_id) => {
+    postGallery(name, description, urls, author_id)
       .then(({ data }) => {
         setGalleryState((prevState) => [...prevState, data]);
       })
@@ -19,14 +15,14 @@ const GalleryProvider = ({ children }) => {
       });
   };
 
-  const GalleryContext = {
+  const galleryContext = {
     galleries: galleryState,
     updateGallery: setGalleryState,
     addGallery: postNewGallery,
   };
 
   return (
-    <GalleriesContext.Provider value={GalleryContext}>
+    <GalleriesContext.Provider value={galleryContext}>
       {children}
     </GalleriesContext.Provider>
   );

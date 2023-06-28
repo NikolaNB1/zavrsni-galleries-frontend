@@ -1,14 +1,20 @@
 import React, { useContext, useState } from "react";
 import GalleriesContext from "../storage/GalleriesContext";
+import UserContext from "../storage/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const CreateGalleryForm = () => {
   const { addGallery } = useContext(GalleriesContext);
+  const { user } = useContext(UserContext);
   const [urls, setUrls] = useState([""]);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const [gallery, setGallery] = useState({
     name: "",
     description: "",
     urls: [],
+    author_id: user.user.id,
   });
 
   const handleInputChange = (event) => {
@@ -21,13 +27,41 @@ const CreateGalleryForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(gallery);
-    addGallery(gallery.name, gallery.description, gallery.urls);
+
+    if (gallery.description.length > 1000) {
+      setError("Description must be max 1000 characters long.");
+      return;
+    }
+
+    if (gallery.name.length === 0) {
+      setError("Name field is required.");
+      return;
+    }
+
+    if (gallery.name.length < 2) {
+      setError("Name must be at least 2 characters long.");
+      return;
+    }
+
+    if (gallery.urls.length === 0) {
+      setError("Url field is required.");
+      return;
+    }
+
+    if (gallery.urls.some((url) => url === "")) {
+      setError("Please fill in all URL fields or remove them.");
+      return;
+    }
+
+    addGallery(gallery.name, gallery.description, gallery.urls, user.user.id);
+    setError("");
     setGallery({
       name: "",
       description: "",
       urls: [],
+      author_id: user.user.id,
     });
+    navigate("/");
   };
 
   const handleUrlChange = (index, value) => {
@@ -65,6 +99,11 @@ const CreateGalleryForm = () => {
             style={{ opacity: "90%", padding: "20px" }}
           >
             <h5 className="text-center mb-4">Add new gallery</h5>
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
             <form className="form-card" onSubmit={handleSubmit}>
               <div className="row justify-content-between text-left">
                 <div className="form-group col-sm-6 flex-column d-flex">
@@ -74,8 +113,7 @@ const CreateGalleryForm = () => {
                     type="text"
                     name="name"
                     placeholder="Enter gallery name"
-                    required
-                    // value={animal.name}
+                    value={gallery.name}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -85,9 +123,9 @@ const CreateGalleryForm = () => {
                     className="mb-3 form-control"
                     rows="4"
                     cols="50"
-                    name="type"
+                    name="description"
                     placeholder="Enter gallery description"
-                    // value={animal.type}
+                    value={gallery.description}
                     onChange={handleInputChange}
                   ></textarea>
                 </div>
