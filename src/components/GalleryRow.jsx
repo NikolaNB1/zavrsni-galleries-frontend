@@ -18,22 +18,18 @@ const GalleryRow = ({ gallery, id }) => {
             width="100"
             height="300"
           />
-          <h3 className="card-text">{gallery.name}</h3>
+          <h3 className="card-text">
+            <Link to={`/galleries/${gallery.id}`}>{gallery.name}</Link>
+          </h3>
           <p className="card-text mb-auto">
             Description: {gallery.description}
           </p>
           <div className="mb-1 text-body-secondary">
-            Author: {gallery.user?.first_name} {gallery.user?.last_name}
-          </div>
-          <p className="card-text mb-auto">Release date: {formattedDate}</p>
-          <div>
-            <Link
-              to={`/galleries/${gallery.id}`}
-              className="btn btn-outline-success"
-            >
-              View gallery
+            <Link to={`/authors/${gallery.user?.id}`}>
+              Author: {gallery.user?.first_name} {gallery.user?.last_name}
             </Link>
           </div>
+          <p className="card-text mb-auto">Release date: {formattedDate}</p>
         </div>
       </div>
     </div>

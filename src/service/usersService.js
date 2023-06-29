@@ -30,3 +30,9 @@ export const logOut = () => {
 export const getUsers = () => {
   return API.get("/users");
 };
+export const getUserGalleries = (id) => {
+  return API.get(`/users/${id}/galleries`);
+};
+export const getUserById = (id) => {
+  return API.get(`/users/${id}`);
+};
