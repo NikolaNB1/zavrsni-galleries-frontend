@@ -73,7 +73,7 @@ const ViewGallery = () => {
               </p>
             </div>
           </div>
-          {loggedIn && user.user.id === gallery.user_id ? (
+          {loggedIn && user.id === gallery.user_id ? (
             <div>
               <Link
                 className="btn btn-outline-warning"
@@ -102,6 +102,7 @@ const ViewGallery = () => {
         <AddComment galleryId={id} setComments={setComments} />
       ) : null}
       <Comments
+        key={comments.id}
         comments={comments}
         user={user}
         handleDeleteComm={handleDeleteComm}

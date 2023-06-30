@@ -1,6 +1,9 @@
 const Comments = ({ comments, user, handleDeleteComm, loggedIn }) => {
   return (
-    <div className="container border mt-5" style={{ width: "700px" }}>
+    <div
+      className="container border mt-5"
+      style={{ width: "700px", paddingBottom: "50px" }}
+    >
       <h2>Comments ({comments?.length})</h2>
       {comments?.map((comment, index) => (
         <div key={comment.id} className="comment">
@@ -17,7 +20,7 @@ const Comments = ({ comments, user, handleDeleteComm, loggedIn }) => {
             style={{ width: "100%" }}
             value={comment.description}
           ></textarea>
-          {loggedIn && user.user.id === comment.user_id ? (
+          {loggedIn && user.id === comment.user_id ? (
             <button
               className="btn btn-outline-danger"
               type="delete"

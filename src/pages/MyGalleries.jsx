@@ -11,11 +11,11 @@ const MyGalleries = () => {
   useEffect(() => {
     getGalleries().then(({ data }) => {
       const userGalleries = data.data.filter(
-        (data) => data.user.id === user.user.id
+        (data) => data.user.id === user.id
       );
       updateGallery(userGalleries);
     });
-  }, [updateGallery, user.user.id]);
+  }, [updateGallery, user.id]);
 
   return (
     <div>

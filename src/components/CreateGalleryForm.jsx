@@ -14,7 +14,7 @@ const CreateGalleryForm = () => {
     name: "",
     description: "",
     urls: [],
-    user_id: user.user.id,
+    user_id: user.id,
   });
   const { id } = useParams();
 
@@ -84,13 +84,13 @@ const CreateGalleryForm = () => {
     if (id) {
       editGalleryById(id, gallery);
     } else {
-      addGallery(gallery.name, gallery.description, gallery.urls, user.user.id);
+      addGallery(gallery.name, gallery.description, gallery.urls, user.id);
       setError("");
       setGallery({
         name: "",
         description: "",
         urls: [],
-        user_id: user.user.id,
+        user_id: user.id,
       });
     }
 

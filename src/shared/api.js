@@ -19,9 +19,9 @@ API.interceptors.response.use(
   async function (error) {
     if (error.response.status === 401) {
       const token = localStorage.getItem("access_token");
-      if (token && error.response.status === 401) {
-        const { data } = await API.post("/refresh");
-        localStorage.setItem("access_token", data.authorization.token);
+      if (token) {
+        const { data } = API.post("/refresh");
+        localStorage.setItem("access_token", data.authorisation.token);
       }
       return API(error.config);
     } else {

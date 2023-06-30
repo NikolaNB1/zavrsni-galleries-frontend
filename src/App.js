@@ -8,8 +8,15 @@ import ProtectedRoute from "./shared/ProtectedRoute";
 import ViewGallery from "./pages/ViewGallery";
 import MyGalleries from "./pages/MyGalleries";
 import AuthorsGalleries from "./pages/AuthorsGalleries";
+import { useContext, useEffect } from "react";
+import UserContext from "./storage/UserContext";
 
 function App() {
+  const { checkToken } = useContext(UserContext);
+  useEffect(() => {
+    checkToken();
+  }, []);
+
   return (
     <div className="App">
       <Routes>

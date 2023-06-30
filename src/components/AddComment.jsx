@@ -7,14 +7,14 @@ const AddComment = ({ galleryId, setComments }) => {
   const [comment, setComment] = useState({
     description: "",
     gallery_id: galleryId,
-    user_id: user.user.id,
+    user_id: user.id,
   });
 
   const resetInput = () => {
     setComment({
       description: "",
       gallery_id: galleryId,
-      user_id: user.user.id,
+      user_id: user.id,
     });
   };
 
@@ -29,14 +29,14 @@ const AddComment = ({ galleryId, setComments }) => {
   const handleAdd = (event, comment) => {
     event.preventDefault();
 
-    addComment(comment.description, galleryId, user.user.id);
+    addComment(comment.description, galleryId, user.id);
 
     setComments((prevState) => [
       ...prevState,
       {
         description: comment.description,
         gallery_id: galleryId,
-        user_id: user.user.id,
+        user_id: user.id,
       },
     ]);
 

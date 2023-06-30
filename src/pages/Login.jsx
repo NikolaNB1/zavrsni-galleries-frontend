@@ -19,8 +19,11 @@ const Login = () => {
 
     logIn(user.email, user.password)
       .then(({ data }) => {
-        logInUser(data);
+        logInUser(data.user);
         localStorage.setItem("access_token", data.authorisation.token);
+        localStorage.setItem("email", user.email);
+        localStorage.setItem("password", user.password);
+
         setError("");
         navigate("/");
       })
