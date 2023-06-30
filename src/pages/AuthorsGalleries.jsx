@@ -6,17 +6,39 @@ const AuthorsGalleries = () => {
   const { id } = useParams();
   const [galleries, setGalleries] = useState([]);
   const [author, setAuthor] = useState(null);
+  const [filteredGalleries, setFilteredGalleries] = useState([]);
+  const [searchParam, setSearchParam] = useState("");
 
   useEffect(() => {
     if (id) {
       getUserGalleries(id).then(({ data }) => {
         setGalleries(data.galleries);
+        setFilteredGalleries(data.galleries);
         getUserById(id).then(({ data }) => {
           setAuthor(data.user);
         });
       });
     }
   }, [id]);
+
+  const handleFilter = (e) => {
+    e.preventDefault();
+
+    let filteredGalleries = [];
+
+    if (searchParam) {
+      filteredGalleries = galleries.filter((gallery) => {
+        return (
+          gallery.name.toLowerCase().includes(searchParam.toLowerCase()) ||
+          gallery.description.toLowerCase().includes(searchParam.toLowerCase())
+        );
+      });
+    } else {
+      filteredGalleries = galleries;
+    }
+
+    setFilteredGalleries(filteredGalleries);
+  };
 
   return (
     <div>
@@ -25,12 +47,26 @@ const AuthorsGalleries = () => {
           Author: {author.first_name} {author.last_name}
         </h1>
       )}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <form className="d-flex mt-3" onSubmit={handleFilter}>
+          <input
+            type="text"
+            className="form-control mr-2"
+            placeholder="Search by name, or description..."
+            value={searchParam}
+            onChange={(e) => setSearchParam(e.target.value)}
+          />
+          <button type="submit" className="btn btn-outline-success">
+            Filter
+          </button>
+        </form>
+      </div>
       <div
         className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"
         style={{ margin: "auto" }}
       >
-        {Array.isArray(galleries) && galleries.length > 0 ? (
-          galleries.map((gallery, id) => (
+        {Array.isArray(filteredGalleries) && filteredGalleries.length > 0 ? (
+          filteredGalleries.map((gallery, id) => (
             <div
               key={id}
               className="col m-5"

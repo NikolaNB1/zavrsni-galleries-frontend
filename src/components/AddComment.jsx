@@ -29,16 +29,17 @@ const AddComment = ({ galleryId, setComments }) => {
   const handleAdd = (event, comment) => {
     event.preventDefault();
 
-    addComment(comment.description, galleryId, user.id);
-
-    setComments((prevState) => [
-      ...prevState,
-      {
-        description: comment.description,
-        gallery_id: galleryId,
-        user_id: user.id,
-      },
-    ]);
+    addComment(comment.description, galleryId, user.id).then(({ data }) => {
+      setComments((prevState) => [
+        ...prevState,
+        {
+          description: data.description,
+          gallery_id: data.gallery_id,
+          user_id: data.user_id,
+          created_at: new Date(data.created_at).toLocaleString(),
+        },
+      ]);
+    });
 
     resetInput();
   };

@@ -1,7 +1,7 @@
 import { API } from "../shared/api";
 
-export const getGalleries = () => {
-  return API.get(`/galleries`);
+export const getGalleries = (params) => {
+  return API.get(`/galleries`, { params });
 };
 export const postGallery = (name, description, urls, user_id) => {
   return API.post("/galleries", {

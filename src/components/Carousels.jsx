@@ -11,7 +11,8 @@ const Carousels = ({ urls }) => {
                 src={url}
                 alt={`Slide ${index}`}
                 width="300"
-                height="300"
+                height="500"
+                style={{ borderRadius: "20px" }}
               />
             </a>
             <Carousel.Caption></Carousel.Caption>

@@ -59,7 +59,7 @@ const ViewGallery = () => {
       >
         <div
           className="col m-5"
-          style={{ width: "380px", borderRadius: "5px", opacity: "90%" }}
+          style={{ width: "700px", borderRadius: "5px", opacity: "90%" }}
         >
           <div className="card shadow-sm">
             <div className="card-body bg-light border rounded border">
@@ -67,34 +67,34 @@ const ViewGallery = () => {
               <div className="mb-1 text-body-secondary">
                 Author: {gallery.user?.first_name} {gallery.user?.last_name}
               </div>
-              <p className="card-text mb-auto">Release date: {formattedDate}</p>
-              <p className="card-text mb-auto">
+              <p className="card-text mb-2">Release date: {formattedDate}</p>
+              <p className="card-text mb-3">
                 Description: {gallery.description}
               </p>
+              {loggedIn && user.id === gallery.user_id ? (
+                <div className="d-flex justify-content-evenly">
+                  <Link
+                    className="btn btn-warning"
+                    to={`/edit-gallery/${gallery.id}`}
+                  >
+                    Edit Gallery
+                  </Link>
+                  <button
+                    className="btn btn-danger"
+                    type="delete"
+                    onClick={() => handleDeleteGallery(gallery.id)}
+                  >
+                    Delete Gallery
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
-          {loggedIn && user.id === gallery.user_id ? (
-            <div>
-              <Link
-                className="btn btn-outline-warning"
-                to={`/edit-gallery/${gallery.id}`}
-              >
-                Edit Gallery
-              </Link>
-              <button
-                className="btn btn-outline-danger"
-                type="delete"
-                onClick={() => handleDeleteGallery(gallery.id)}
-              >
-                Delete Gallery
-              </button>
-            </div>
-          ) : null}
         </div>
       </div>
       <div
-        className="row row-cols-1 justify-content-center"
-        style={{ margin: "auto", width: "400px" }}
+        className="d-flex justify-content-center"
+        style={{ margin: "auto", width: "700px" }}
       >
         <Carousels urls={urls} />
       </div>
@@ -102,7 +102,7 @@ const ViewGallery = () => {
         <AddComment galleryId={id} setComments={setComments} />
       ) : null}
       <Comments
-        key={comments.id}
+        id={comments.id}
         comments={comments}
         user={user}
         handleDeleteComm={handleDeleteComm}
