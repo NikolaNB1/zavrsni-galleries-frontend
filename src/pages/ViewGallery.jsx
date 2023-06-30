@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getGalleryById } from "../service/galleryService";
 import Carousel from "react-bootstrap/Carousel";
+import AddComment from "../components/AddComment";
+import UserContext from "../storage/UserContext";
 
 const ViewGallery = () => {
+  const { loggedIn } = useContext(UserContext);
   const [gallery, setGallery] = useState({});
   const { id } = useParams();
+  const [comments, setComments] = useState([]);
   const formattedDate = new Date(gallery.created_at).toLocaleString();
   const urls = gallery.urls?.split(",") || [];
 
@@ -13,9 +17,10 @@ const ViewGallery = () => {
     if (id) {
       getGalleryById(id).then(({ data }) => {
         setGallery(data);
+        setComments(data.comments);
       });
     }
-  }, [id]);
+  }, [id, setComments]);
 
   return (
     <div>
@@ -61,6 +66,29 @@ const ViewGallery = () => {
             </Carousel.Item>
           ))}
         </Carousel>
+      </div>
+      {loggedIn ? (
+        <AddComment galleryId={id} setComments={setComments} />
+      ) : null}
+      <div className="container border mt-5" style={{ width: "700px" }}>
+        <h2>Comments ({comments?.length})</h2>
+        {comments?.map((comment, index) => (
+          <div key={comment.id} className="comment">
+            <div className="d-flex justify-content-between">
+              <p>No of comment: {index + 1}</p>
+              <p>Author: {comment.user_id}</p>
+              <p>{new Date(comment.created_at).toLocaleString()}</p>
+            </div>
+            <p></p>
+            <textarea
+              disabled
+              rows="3"
+              cols="10"
+              style={{ width: "100%" }}
+              value={comment.description}
+            ></textarea>
+          </div>
+        ))}
       </div>
     </div>
   );

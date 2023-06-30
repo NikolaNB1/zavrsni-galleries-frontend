@@ -11,13 +11,9 @@ const AuthorsGalleries = () => {
     if (id) {
       getUserGalleries(id).then(({ data }) => {
         setGalleries(data.galleries);
-        console.log(data.galleries);
-        if (data.galleries.length > 0) {
-          const userId = data.galleries[0].user_id;
-          getUserById(userId).then(({ data }) => {
-            setAuthor(data.user);
-          });
-        }
+        getUserById(id).then(({ data }) => {
+          setAuthor(data.user);
+        });
       });
     }
   }, [id]);
