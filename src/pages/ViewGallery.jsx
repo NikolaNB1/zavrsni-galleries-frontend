@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getGalleryById } from "../service/galleryService";
+import { deleteCommentById, getGalleryById } from "../service/galleryService";
 import Carousel from "react-bootstrap/Carousel";
 import AddComment from "../components/AddComment";
 import UserContext from "../storage/UserContext";
 
 const ViewGallery = () => {
-  const { loggedIn } = useContext(UserContext);
+  const { loggedIn, user } = useContext(UserContext);
   const [gallery, setGallery] = useState({});
   const { id } = useParams();
   const [comments, setComments] = useState([]);
@@ -21,6 +21,18 @@ const ViewGallery = () => {
       });
     }
   }, [id, setComments]);
+
+  const handleDelete = (id) => {
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete comment?"
+    );
+    if (shouldDelete) {
+      deleteCommentById(id);
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.id !== id)
+      );
+    }
+  };
 
   return (
     <div>
@@ -87,6 +99,15 @@ const ViewGallery = () => {
               style={{ width: "100%" }}
               value={comment.description}
             ></textarea>
+            {loggedIn && user.user.id === comment.user_id ? (
+              <button
+                className="btn btn-outline-danger"
+                type="delete"
+                onClick={() => handleDelete(comment.id)}
+              >
+                Delete Comment
+              </button>
+            ) : null}
           </div>
         ))}
       </div>

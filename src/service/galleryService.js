@@ -21,3 +21,6 @@ export const addComment = (description, gallery_id, user_id) => {
     user_id,
   });
 };
+export const deleteCommentById = (id) => {
+  return API.delete(`/comments/${id}`);
+};
