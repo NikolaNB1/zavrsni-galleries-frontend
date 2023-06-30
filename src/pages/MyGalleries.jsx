@@ -28,7 +28,7 @@ const MyGalleries = () => {
             <GalleryRow key={id} gallery={gallery} id={id} />
           ))
         ) : (
-          <p className="container mt-5">No content to show.</p>
+          <h2 className="container mt-5">You don't have galleries.</h2>
         )}
       </div>
     </div>

@@ -39,7 +39,7 @@ const AuthorsGalleries = () => {
               <div className="card shadow-sm">
                 <div className="card-body bg-light border rounded border">
                   <img
-                    src={gallery.urls.split(",")[0]}
+                    src={JSON.parse(gallery.urls || "[]")[0]}
                     className="card-img-top"
                     alt={`${gallery.name}`}
                     width="100"
@@ -49,7 +49,7 @@ const AuthorsGalleries = () => {
                     <Link to={`/galleries/${gallery.id}`}>{gallery.name}</Link>
                   </h3>
                   <p className="card-text mb-auto">
-                    Description: {gallery.description}
+                    Description: {gallery.description.substring(0, 50) + "..."}
                   </p>
                   <p className="card-text mb-auto">
                     Release date:{" "}
@@ -60,7 +60,7 @@ const AuthorsGalleries = () => {
             </div>
           ))
         ) : (
-          <p className="container mt-5">No content to show.</p>
+          <h1 className="container mt-5">No content to show.</h1>
         )}
       </div>
     </div>

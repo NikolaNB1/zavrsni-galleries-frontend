@@ -5,9 +5,11 @@ import {
   deleteGalleryById,
   getGalleryById,
 } from "../service/galleryService";
-import Carousel from "react-bootstrap/Carousel";
+
 import AddComment from "../components/AddComment";
 import UserContext from "../storage/UserContext";
+import Carousels from "../components/Carousels";
+import Comments from "../components/Comments";
 
 const ViewGallery = () => {
   const { loggedIn, user } = useContext(UserContext);
@@ -94,55 +96,17 @@ const ViewGallery = () => {
         className="row row-cols-1 justify-content-center"
         style={{ margin: "auto", width: "400px" }}
       >
-        <Carousel>
-          {urls.map((url, index) => (
-            <Carousel.Item key={index}>
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                <img
-                  className="d-block w-100"
-                  src={url}
-                  alt={`Slide ${index}`}
-                  width="300"
-                  height="300"
-                />
-              </a>
-              <Carousel.Caption></Carousel.Caption>
-            </Carousel.Item>
-          ))}
-        </Carousel>
+        <Carousels urls={urls} />
       </div>
       {loggedIn ? (
         <AddComment galleryId={id} setComments={setComments} />
       ) : null}
-      <div className="container border mt-5" style={{ width: "700px" }}>
-        <h2>Comments ({comments?.length})</h2>
-        {comments?.map((comment, index) => (
-          <div key={comment.id} className="comment">
-            <div className="d-flex justify-content-between">
-              <p>No of comment: {index + 1}</p>
-              <p>Author: {comment.user_id}</p>
-              <p>{new Date(comment.created_at).toLocaleString()}</p>
-            </div>
-            <p></p>
-            <textarea
-              disabled
-              rows="3"
-              cols="10"
-              style={{ width: "100%" }}
-              value={comment.description}
-            ></textarea>
-            {loggedIn && user.user.id === comment.user_id ? (
-              <button
-                className="btn btn-outline-danger"
-                type="delete"
-                onClick={() => handleDeleteComm(comment.id)}
-              >
-                Delete Comment
-              </button>
-            ) : null}
-          </div>
-        ))}
-      </div>
+      <Comments
+        comments={comments}
+        user={user}
+        handleDeleteComm={handleDeleteComm}
+        loggedIn={loggedIn}
+      />
     </div>
   );
 };

@@ -23,7 +23,7 @@ const Home = () => {
             <GalleryRow key={id} gallery={gallery} id={id} />
           ))
         ) : (
-          <p className="container mt-5">No content to show.</p>
+          <h1 className="container mt-5">No content to show.</h1>
         )}
       </div>
     </div>
