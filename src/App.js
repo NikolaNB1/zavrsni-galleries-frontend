@@ -34,6 +34,14 @@ function App() {
           }
         ></Route>
         <Route path="authors/:id" element={<AuthorsGalleries />}></Route>
+        <Route
+          path="edit-gallery/:id"
+          element={
+            <ProtectedRoute>
+              <CreateGallery />
+            </ProtectedRoute>
+          }
+        ></Route>
       </Routes>
     </div>
   );

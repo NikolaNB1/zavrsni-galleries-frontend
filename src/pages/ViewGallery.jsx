@@ -1,6 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { deleteCommentById, getGalleryById } from "../service/galleryService";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  deleteCommentById,
+  deleteGalleryById,
+  getGalleryById,
+} from "../service/galleryService";
 import Carousel from "react-bootstrap/Carousel";
 import AddComment from "../components/AddComment";
 import UserContext from "../storage/UserContext";
@@ -11,7 +15,8 @@ const ViewGallery = () => {
   const { id } = useParams();
   const [comments, setComments] = useState([]);
   const formattedDate = new Date(gallery.created_at).toLocaleString();
-  const urls = gallery.urls?.split(",") || [];
+  const urls = JSON.parse(gallery.urls || "[]");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -22,15 +27,25 @@ const ViewGallery = () => {
     }
   }, [id, setComments]);
 
-  const handleDelete = (id) => {
+  const handleDeleteComm = (id) => {
     const shouldDelete = window.confirm(
-      "Are you sure you want to delete comment?"
+      "Are you sure you want to delete the comment?"
     );
     if (shouldDelete) {
       deleteCommentById(id);
       setComments((prevComments) =>
         prevComments.filter((comment) => comment.id !== id)
       );
+    }
+  };
+
+  const handleDeleteGallery = (id) => {
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete the gallery?"
+    );
+    if (shouldDelete) {
+      deleteGalleryById(id);
+      navigate("/");
     }
   };
 
@@ -56,6 +71,23 @@ const ViewGallery = () => {
               </p>
             </div>
           </div>
+          {loggedIn && user.user.id === gallery.user_id ? (
+            <div>
+              <Link
+                className="btn btn-outline-warning"
+                to={`/edit-gallery/${gallery.id}`}
+              >
+                Edit Gallery
+              </Link>
+              <button
+                className="btn btn-outline-danger"
+                type="delete"
+                onClick={() => handleDeleteGallery(gallery.id)}
+              >
+                Delete Gallery
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
       <div
@@ -65,10 +97,10 @@ const ViewGallery = () => {
         <Carousel>
           {urls.map((url, index) => (
             <Carousel.Item key={index}>
-              <a href={url.trim()} target="_blank" rel="noopener noreferrer">
+              <a href={url} target="_blank" rel="noopener noreferrer">
                 <img
                   className="d-block w-100"
-                  src={url.trim()}
+                  src={url}
                   alt={`Slide ${index}`}
                   width="300"
                   height="300"
@@ -103,7 +135,7 @@ const ViewGallery = () => {
               <button
                 className="btn btn-outline-danger"
                 type="delete"
-                onClick={() => handleDelete(comment.id)}
+                onClick={() => handleDeleteComm(comment.id)}
               >
                 Delete Comment
               </button>
@@ -114,4 +146,5 @@ const ViewGallery = () => {
     </div>
   );
 };
+
 export default ViewGallery;

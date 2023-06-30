@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GalleriesContext from "../storage/GalleriesContext";
 import UserContext from "../storage/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { editGalleryById, getGalleryById } from "../service/galleryService";
 
 const CreateGalleryForm = () => {
   const { addGallery } = useContext(GalleriesContext);
@@ -9,13 +10,22 @@ const CreateGalleryForm = () => {
   const [urls, setUrls] = useState([""]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
   const [gallery, setGallery] = useState({
     name: "",
     description: "",
     urls: [],
     user_id: user.user.id,
   });
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      getGalleryById(id).then(({ data }) => {
+        setGallery(data);
+        setUrls(JSON.parse(data.urls));
+      });
+    }
+  }, [id]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -48,7 +58,7 @@ const CreateGalleryForm = () => {
       return;
     }
 
-    if (gallery.urls.some((url) => url === "")) {
+    if (Array.isArray(gallery.urls) && gallery.urls.some((url) => url === "")) {
       setError("Please fill in all URL fields or remove them.");
       return;
     }
@@ -71,21 +81,26 @@ const CreateGalleryForm = () => {
         return;
       }
     }
+    if (id) {
+      editGalleryById(id, gallery);
+    } else {
+      addGallery(gallery.name, gallery.description, gallery.urls, user.user.id);
+      setError("");
+      setGallery({
+        name: "",
+        description: "",
+        urls: [],
+        user_id: user.user.id,
+      });
+    }
 
-    addGallery(gallery.name, gallery.description, gallery.urls, user.user.id);
-    setError("");
-    setGallery({
-      name: "",
-      description: "",
-      urls: [],
-      user_id: user.user.id,
-    });
     navigate("/");
   };
 
   const handleUrlChange = (index, value) => {
     const newUrls = [...urls];
     newUrls[index] = value;
+
     setUrls(newUrls);
 
     setGallery((prevState) => ({
@@ -150,33 +165,37 @@ const CreateGalleryForm = () => {
                 </div>
               </div>
               <div className="row justify-content-between text-left">
-                {urls.map((url, index) => (
-                  <div
-                    className="form-group col-sm-6 flex-column d-flex"
-                    key={index}
-                  >
-                    <label className="form-control-label px-3">Url</label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      placeholder="Enter image url"
-                      value={url}
-                      onChange={(e) => handleUrlChange(index, e.target.value)}
-                      required
-                      pattern=".*\.(png|jpg|jpeg)$"
-                      title="Please enter a valid image URL ending with .png, .jpg, or .jpeg"
-                    />
-                    {index > 0 && (
-                      <button
-                        type="button"
-                        className="btn btn-danger btn-sm mt-2 mb-2"
-                        onClick={() => removeUrlField(index)}
+                {Array.isArray(urls)
+                  ? urls.map((url, index) => (
+                      <div
+                        className="form-group col-sm-6 flex-column d-flex"
+                        key={index}
                       >
-                        Remove URL
-                      </button>
-                    )}
-                  </div>
-                ))}
+                        <label className="form-control-label px-3">Url</label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Enter image url"
+                          value={url}
+                          onChange={(e) =>
+                            handleUrlChange(index, e.target.value)
+                          }
+                          required
+                          pattern=".*\.(png|jpg|jpeg)$"
+                          title="Please enter a valid image URL ending with .png, .jpg, or .jpeg"
+                        />
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            className="btn btn-danger btn-sm mt-2 mb-2"
+                            onClick={() => removeUrlField(index)}
+                          >
+                            Remove URL
+                          </button>
+                        )}
+                      </div>
+                    ))
+                  : null}
                 <div className="form-group col-sm-6">
                   <button
                     type="button"
@@ -189,13 +208,23 @@ const CreateGalleryForm = () => {
               </div>
               <div className="row justify-content-end mt-3">
                 <div className="form-group col-sm-6">
-                  <button
-                    type="submit"
-                    className="btn btn-success"
-                    onClick={handleSubmit}
-                  >
-                    Add gallery
-                  </button>
+                  {!id ? (
+                    <button
+                      type="submit"
+                      className="btn btn-success"
+                      onClick={handleSubmit}
+                    >
+                      Add gallery
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn btn-warning"
+                      onClick={handleSubmit}
+                    >
+                      Edit gallery
+                    </button>
+                  )}
                 </div>
               </div>
             </form>

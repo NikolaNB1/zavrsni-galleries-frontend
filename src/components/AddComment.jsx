@@ -58,9 +58,7 @@ const AddComment = ({ galleryId, setComments }) => {
             placeholder="Add comment..."
             className="form-control"
             name="description"
-          >
-            {user.user.first_name} {user.user.last_name}
-          </textarea>
+          ></textarea>
           <input type="hidden" />
         </div>
         <div>
