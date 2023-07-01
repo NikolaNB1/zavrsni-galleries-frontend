@@ -102,10 +102,9 @@ const ViewGallery = () => {
         <AddComment galleryId={id} setComments={setComments} />
       ) : null}
       <Comments
-        id={comments.id}
         comments={comments}
         user={user}
-        handleDeleteComm={handleDeleteComm}
+        handleDeleteComm={(id) => handleDeleteComm(id)}
         loggedIn={loggedIn}
       />
     </div>

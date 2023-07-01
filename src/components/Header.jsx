@@ -4,7 +4,7 @@ import UserContext from "../storage/UserContext";
 import { logOut } from "../service/usersService";
 
 const Header = () => {
-  const { loggedIn, logOutUser } = useContext(UserContext);
+  const { loggedIn, logOutUser, user } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogOut = () => {
@@ -27,17 +27,17 @@ const Header = () => {
           <div className="logo">
             <Link to="/">Galleries</Link>
           </div>
-          {/* <div className="user_div">
+          <div className="user_div">
             {loggedIn ? (
               <ul>
                 <li className="user">
                   <Link to="#">
-                    {user?.user.first_name} {user?.user.last_name}
+                    {user?.first_name} {user?.last_name}
                   </Link>
                 </li>
               </ul>
             ) : null}
-          </div> */}
+          </div>
           <div id="mainListDiv" className="main_list">
             <ul className="navlinks">
               {loggedIn ? (

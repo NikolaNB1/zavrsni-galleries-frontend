@@ -73,25 +73,29 @@ const AuthorsGalleries = () => {
               style={{ width: "380px", borderRadius: "5px", opacity: "90%" }}
             >
               <div className="card shadow-sm">
-                <div className="card-body bg-light border rounded border">
-                  <img
-                    src={JSON.parse(gallery.urls || "[]")[0]}
-                    className="card-img-top"
-                    alt={`${gallery.name}`}
-                    width="100"
-                    height="300"
-                  />
-                  <h3 className="card-text">
-                    <Link to={`/galleries/${gallery.id}`}>{gallery.name}</Link>
-                  </h3>
-                  <p className="card-text mb-auto">
-                    Description: {gallery.description.substring(0, 50) + "..."}
-                  </p>
-                  <p className="card-text mb-auto">
-                    Release date:{" "}
-                    {new Date(gallery.created_at).toLocaleString()}
-                  </p>
-                </div>
+                <h3>
+                  <Link
+                    to={`/galleries/${gallery.id}`}
+                    style={{ textDecoration: "none", color: "darkslategrey" }}
+                  >
+                    {gallery.name}
+                  </Link>
+                </h3>
+                <p className="card-text mb-auto">
+                  {new Date(gallery.created_at).toLocaleString()}
+                </p>
+                <img
+                  src={JSON.parse(gallery.urls || "[]")[0]}
+                  className="card-img-top"
+                  alt={`${gallery.name}`}
+                  width="100"
+                  height="300"
+                />
+                <p className="card-text mb-auto">
+                  {gallery.description
+                    ? gallery.description.substring(0, 50) + "..."
+                    : "No description"}
+                </p>
               </div>
             </div>
           ))

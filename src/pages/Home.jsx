@@ -66,7 +66,7 @@ const Home = () => {
         {isFilterApplied && filteredGalleries.length === 0 ? (
           <h1 className="container mt-5">No content by filter.</h1>
         ) : (
-          (filteredGalleries.length > 0 ? filteredGalleries : galleries).map(
+          (filteredGalleries.length > 0 ? filteredGalleries : galleries)?.map(
             (gallery, id) => <GalleryRow key={id} gallery={gallery} id={id} />
           )
         )}

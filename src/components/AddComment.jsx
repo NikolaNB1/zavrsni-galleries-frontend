@@ -30,12 +30,10 @@ const AddComment = ({ galleryId, setComments }) => {
     event.preventDefault();
 
     addComment(comment.description, galleryId, user.id).then(({ data }) => {
-      setComments((prevState) => [
-        ...prevState,
+      setComments((prevComments) => [
+        ...prevComments,
         {
-          description: data.description,
-          gallery_id: data.gallery_id,
-          user_id: data.user_id,
+          ...data,
           created_at: new Date(data.created_at).toLocaleString(),
         },
       ]);

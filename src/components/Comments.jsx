@@ -33,13 +33,21 @@ const Comments = ({ comments, user, handleDeleteComm, loggedIn }) => {
               style={{ width: "100%", borderRadius: "5px" }}
               value={comment.description}
             ></textarea>
-            {loggedIn && user.id === comment.user_id ? (
-              <div className="d-flex justify-content-between">
-                <p>
-                  Comment author:{" "}
-                  {users.find((user) => user.id === comment.user_id).first_name}{" "}
-                  {users.find((user) => user.id === comment.user_id).last_name}
-                </p>
+            <div className="d-flex justify-content-between">
+              <p>
+                Comment author:{" "}
+                {Array.isArray(users)
+                  ? (() => {
+                      const user = users.find(
+                        (user) => user.id === comment.user_id
+                      );
+                      return user
+                        ? `${user.first_name} ${user.last_name}`
+                        : null;
+                    })()
+                  : null}
+              </p>
+              {loggedIn && user.id === comment.user_id ? (
                 <button
                   className="btn btn-danger "
                   type="delete"
@@ -47,8 +55,8 @@ const Comments = ({ comments, user, handleDeleteComm, loggedIn }) => {
                 >
                   Delete Comment
                 </button>
-              </div>
-            ) : null}
+              ) : null}
+            </div>
           </div>
         </div>
       ))}
