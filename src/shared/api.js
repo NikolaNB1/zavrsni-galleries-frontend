@@ -17,7 +17,7 @@ API.interceptors.response.use(
     return response;
   },
   async function (error) {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       const token = localStorage.getItem("access_token");
       if (token) {
         const { data } = API.post("/refresh");

@@ -83,6 +83,7 @@ const CreateGalleryForm = () => {
     }
     if (id) {
       editGalleryById(id, gallery);
+      navigate(`/galleries/${id}`);
     } else {
       addGallery(gallery.name, gallery.description, gallery.urls, user.id);
       setError("");
@@ -92,9 +93,8 @@ const CreateGalleryForm = () => {
         urls: [],
         user_id: user.id,
       });
+      navigate("/");
     }
-
-    navigate("/");
   };
 
   const handleUrlChange = (index, value) => {

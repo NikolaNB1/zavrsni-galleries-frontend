@@ -9,6 +9,7 @@ const MyGalleries = () => {
   const [author, setAuthor] = useState(null);
   const [filteredGalleries, setFilteredGalleries] = useState([]);
   const [searchParam, setSearchParam] = useState("");
+  const [visibleGalleries, setVisibleGalleries] = useState(10);
 
   useEffect(() => {
     if (user && user.id) {
@@ -39,6 +40,11 @@ const MyGalleries = () => {
     }
 
     setFilteredGalleries(filteredGalleries);
+    setVisibleGalleries(10);
+  };
+
+  const loadMoreGalleries = () => {
+    setVisibleGalleries((prevVisibleGalleries) => prevVisibleGalleries + 10);
   };
 
   return (
@@ -62,7 +68,7 @@ const MyGalleries = () => {
         style={{ margin: "auto" }}
       >
         {Array.isArray(filteredGalleries) && filteredGalleries.length > 0 ? (
-          filteredGalleries.map((gallery, id) => (
+          filteredGalleries.slice(0, visibleGalleries).map((gallery, id) => (
             <div
               key={id}
               className="col m-5"
@@ -110,7 +116,15 @@ const MyGalleries = () => {
           </h1>
         )}
       </div>
+      {visibleGalleries < filteredGalleries.length && (
+        <div className="d-flex justify-content-center m-3">
+          <button className="btn btn-primary" onClick={loadMoreGalleries}>
+            Load More
+          </button>
+        </div>
+      )}
     </div>
   );
 };
+
 export default MyGalleries;
