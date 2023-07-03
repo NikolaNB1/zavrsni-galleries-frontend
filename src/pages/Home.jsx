@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import GalleriesContext from "../storage/GalleriesContext";
-import { getGalleries } from "../service/galleryService";
+import { filterGalleries, getGalleries } from "../service/galleryService";
 import GalleryRow from "../components/GalleryRow";
 
 const Home = () => {
@@ -61,29 +61,19 @@ const Home = () => {
   const handleFilter = (e) => {
     e.preventDefault();
 
-    let filteredGalleries = [];
-
     if (searchName) {
-      filteredGalleries = galleries.filter((gallery) => {
-        return (
-          gallery.name.toLowerCase().includes(searchName.toLowerCase()) ||
-          gallery.description
-            .toLowerCase()
-            .includes(searchName.toLowerCase()) ||
-          gallery.user.first_name
-            .toLowerCase()
-            .includes(searchName.toLowerCase()) ||
-          gallery.user.last_name
-            .toLowerCase()
-            .includes(searchName.toLowerCase())
-        );
+      filterGalleries(searchName).then(({ data }) => {
+        setFilteredGalleries(data.data);
+        setLastPage(data.last_page);
       });
+      setIsFilterApplied(true);
     } else {
-      filteredGalleries = galleries;
+      getGalleries({ page: 1 }).then(({ data }) => {
+        setFilteredGalleries(data.data);
+        setLastPage(data.last_page);
+      });
+      setIsFilterApplied(false);
     }
-
-    setFilteredGalleries(filteredGalleries);
-    setIsFilterApplied(true);
   };
 
   return (
@@ -123,7 +113,7 @@ const Home = () => {
             ))
         )}
       </div>
-      {loadMoreVisible && (
+      {loadMoreVisible && currentPage < lastPage && (
         <div className="d-flex justify-content-center m-3">
           <button className="btn btn-primary" onClick={loadMoreGalleries}>
             Load More

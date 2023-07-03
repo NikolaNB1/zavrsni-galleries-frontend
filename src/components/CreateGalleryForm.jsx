@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import GalleriesContext from "../storage/GalleriesContext";
 import UserContext from "../storage/UserContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { editGalleryById, getGalleryById } from "../service/galleryService";
 
 const CreateGalleryForm = () => {
@@ -48,8 +48,8 @@ const CreateGalleryForm = () => {
       return;
     }
 
-    if (gallery.name.length < 2) {
-      setError("Name must be at least 2 characters long.");
+    if (gallery.name.length < 2 || gallery.name.length > 255) {
+      setError("Name must be between 2 and 255 characters.");
       return;
     }
 
@@ -114,8 +114,43 @@ const CreateGalleryForm = () => {
   };
 
   const removeUrlField = (index) => {
+    if (urls.length === 1) {
+      setError("At least one URL is required.");
+      return;
+    }
+
     const newUrls = [...urls];
     newUrls.splice(index, 1);
+    setUrls(newUrls);
+
+    setGallery((prevState) => ({
+      ...prevState,
+      urls: newUrls,
+    }));
+  };
+
+  const moveUrlUp = (index) => {
+    if (index === 0) return;
+
+    const newUrls = [...urls];
+    const temp = newUrls[index - 1];
+    newUrls[index - 1] = newUrls[index];
+    newUrls[index] = temp;
+    setUrls(newUrls);
+
+    setGallery((prevState) => ({
+      ...prevState,
+      urls: newUrls,
+    }));
+  };
+
+  const moveUrlDown = (index) => {
+    if (index === urls.length - 1) return;
+
+    const newUrls = [...urls];
+    const temp = newUrls[index + 1];
+    newUrls[index + 1] = newUrls[index];
+    newUrls[index] = temp;
     setUrls(newUrls);
 
     setGallery((prevState) => ({
@@ -193,9 +228,28 @@ const CreateGalleryForm = () => {
                             Remove URL
                           </button>
                         )}
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            className="btn btn-secondary btn-sm mt-2 mb-2"
+                            onClick={() => moveUrlUp(index)}
+                          >
+                            Move Up
+                          </button>
+                        )}
+                        {index < urls.length - 1 && (
+                          <button
+                            type="button"
+                            className="btn btn-secondary btn-sm mt-2 mb-2"
+                            onClick={() => moveUrlDown(index)}
+                          >
+                            Move Down
+                          </button>
+                        )}
                       </div>
                     ))
                   : null}
+
                 <div className="form-group col-sm-6">
                   <button
                     type="button"
@@ -217,13 +271,18 @@ const CreateGalleryForm = () => {
                       Add gallery
                     </button>
                   ) : (
-                    <button
-                      type="submit"
-                      className="btn btn-warning"
-                      onClick={handleSubmit}
-                    >
-                      Edit gallery
-                    </button>
+                    <div className="d-flex justify-content-evenly">
+                      <button
+                        type="submit"
+                        className="btn btn-warning"
+                        onClick={handleSubmit}
+                      >
+                        Edit gallery
+                      </button>
+                      <Link to={`/galleries/${id}`} className="btn btn-primary">
+                        Cancel
+                      </Link>
+                    </div>
                   )}
                 </div>
               </div>

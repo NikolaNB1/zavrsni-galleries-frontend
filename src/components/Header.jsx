@@ -2,22 +2,36 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../storage/UserContext";
 import { logOut } from "../service/usersService";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const Header = () => {
   const { loggedIn, logOutUser, user } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogOut = () => {
-    const shouldLogOut = window.confirm("Are you sure?");
-    if (shouldLogOut) {
-      logOut().then(({ data }) => {
-        logOutUser(data);
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("email");
-        localStorage.removeItem("password");
-        navigate("/login");
-      });
-    }
+    confirmAlert({
+      title: "Log Out",
+      message: "Are you sure you want to log out?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            logOut().then(({ data }) => {
+              logOutUser(data);
+              localStorage.removeItem("access_token");
+              localStorage.removeItem("email");
+              localStorage.removeItem("password");
+              navigate("/login");
+            });
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
   };
 
   return (

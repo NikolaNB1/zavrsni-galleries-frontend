@@ -10,6 +10,8 @@ import AddComment from "../components/AddComment";
 import UserContext from "../storage/UserContext";
 import Carousels from "../components/Carousels";
 import Comments from "../components/Comments";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const ViewGallery = () => {
   const { loggedIn, user } = useContext(UserContext);
@@ -30,25 +32,45 @@ const ViewGallery = () => {
   }, [id, setComments]);
 
   const handleDeleteComm = (id) => {
-    const shouldDelete = window.confirm(
-      "Are you sure you want to delete the comment?"
-    );
-    if (shouldDelete) {
-      deleteCommentById(id);
-      setComments((prevComments) =>
-        prevComments.filter((comment) => comment.id !== id)
-      );
-    }
+    confirmAlert({
+      title: "Delete Comment",
+      message: "Are you sure you want to delete the comment?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            deleteCommentById(id);
+            setComments((prevComments) =>
+              prevComments.filter((comment) => comment.id !== id)
+            );
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
   };
 
   const handleDeleteGallery = (id) => {
-    const shouldDelete = window.confirm(
-      "Are you sure you want to delete the gallery?"
-    );
-    if (shouldDelete) {
-      deleteGalleryById(id);
-      navigate("/");
-    }
+    confirmAlert({
+      title: "Delete Gallery",
+      message: "Are you sure you want to delete the gallery?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            deleteGalleryById(id);
+            navigate("/my-galleries");
+          },
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
   };
 
   return (
