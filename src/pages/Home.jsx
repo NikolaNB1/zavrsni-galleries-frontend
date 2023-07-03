@@ -93,6 +93,7 @@ const Home = () => {
           <input
             type="text"
             className="form-control mr-2"
+            style={{ width: "300px" }}
             placeholder="Search by name, author, or description..."
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}

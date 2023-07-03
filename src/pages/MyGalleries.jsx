@@ -53,6 +53,7 @@ const MyGalleries = () => {
         <form className="d-flex mt-3" onSubmit={handleFilter}>
           <input
             type="text"
+            style={{ width: "300px" }}
             className="form-control mr-2"
             placeholder="Search by name, or description..."
             value={searchParam}

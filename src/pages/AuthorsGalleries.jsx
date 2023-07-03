@@ -57,6 +57,7 @@ const AuthorsGalleries = () => {
         <form className="d-flex mt-3" onSubmit={handleFilter}>
           <input
             type="text"
+            style={{ width: "300px" }}
             className="form-control mr-2"
             placeholder="Search by name, or description..."
             value={searchParam}
@@ -106,7 +107,9 @@ const AuthorsGalleries = () => {
             </div>
           ))
         ) : (
-          <h1 className="container mt-5">No content to show.</h1>
+          <h1 className="container mt-5" style={{ width: "auto" }}>
+            No content to show.
+          </h1>
         )}
       </div>
       {visibleGalleries < filteredGalleries.length && (

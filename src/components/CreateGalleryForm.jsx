@@ -199,7 +199,7 @@ const CreateGalleryForm = () => {
                 <div className="form-group col-sm-6">
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-primary mt-4"
                     onClick={addUrlField}
                   >
                     Add new URL

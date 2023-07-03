@@ -4,6 +4,8 @@ import UserContext from "../storage/UserContext";
 
 const AddComment = ({ galleryId, setComments }) => {
   const { user } = useContext(UserContext);
+  const [error, setError] = useState(null);
+
   const [comment, setComment] = useState({
     description: "",
     gallery_id: galleryId,
@@ -29,15 +31,20 @@ const AddComment = ({ galleryId, setComments }) => {
   const handleAdd = (event, comment) => {
     event.preventDefault();
 
-    addComment(comment.description, galleryId, user.id).then(({ data }) => {
-      setComments((prevComments) => [
-        ...prevComments,
-        {
-          ...data,
-          created_at: new Date(data.created_at).toLocaleString(),
-        },
-      ]);
-    });
+    addComment(comment.description, galleryId, user.id)
+      .then(({ data }) => {
+        setComments((prevComments) => [
+          ...prevComments,
+          {
+            ...data,
+            created_at: new Date(data.created_at).toLocaleString(),
+          },
+        ]);
+        setError("");
+      })
+      .catch(() => {
+        setError("Maximum 1000 characters.");
+      });
 
     resetInput();
   };
@@ -50,6 +57,11 @@ const AddComment = ({ galleryId, setComments }) => {
         onSubmit={(event) => handleAdd(event, comment)}
       >
         <div className="mb-3">
+          {error && (
+            <div className="alert alert-danger mb-4" role="alert">
+              {error}
+            </div>
+          )}
           <label className="form-label">Enter your comment</label>
           <textarea
             onChange={handleInputChange}
